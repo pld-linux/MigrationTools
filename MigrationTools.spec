@@ -1,9 +1,9 @@
-# $Revision: 1.1 $Date: 2000-09-12 13:54:52 $
+# $Revision: 1.2 $Date: 2001-04-17 12:04:43 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools 
 Name:		ldap-MigrationTools
 Version:	24
-Release:	1
+Release:	2
 License:	Custom
 Group:		Base
 Group(pl):	Podstawowe
