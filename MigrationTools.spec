@@ -1,4 +1,4 @@
-# $Revision: 1.5 $Date: 2002-02-22 23:29:10 $
+# $Revision: 1.6 $Date: 2002-02-23 03:26:00 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl):	Narzêdzia do migraacji do LDAP
@@ -14,7 +14,7 @@ BuildRequires:	rpm-perlprov
 Requires:	openldap
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%description 
+%description
 The MigrationTools are a set of Perl scripts for migrating users,
 groups, aliases, hosts, netgroups, networks, protocols, RPCs, and
 services from existing nameservices (flat files, NIS, and NetInfo) to
