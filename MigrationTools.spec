@@ -1,4 +1,4 @@
-# $Revision: 1.13 $Date: 2003-10-09 13:58:23 $
+# $Revision: 1.14 $Date: 2004-04-29 00:44:41 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl):	Narzêdzia do migraacji do LDAP
@@ -18,6 +18,7 @@ Patch3:		MigrationTools-26-suffix.patch
 Patch4:		MigrationTools-44-schema.patch
 BuildRequires:	rpm-perlprov
 Requires:	openldap
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
