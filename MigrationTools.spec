@@ -1,12 +1,16 @@
-# $Revision: 1.2 $Date: 2001-04-17 12:04:43 $
+# $Revision: 1.3 $Date: 2001-12-03 10:31:00 $
 %include        /usr/lib/rpm/macros.perl
-Summary:	LDAP Migration Tools 
+Summary:	LDAP Migration Tools
+Summary(pl):	Narzêdzia do migraacji do LDAP
 Name:		ldap-MigrationTools
 Version:	24
 Release:	2
 License:	Custom
 Group:		Base
+Group(de):	Gründsätzlich
+Group(es):	Base
 Group(pl):	Podstawowe
+Group(pt_BR):	Base
 Source0:	http://www.padl.com/download/MigrationTools.tgz
 Source1:	http://www.padl.com/download/MigrationTools.txt
 URL:		http://www.padl.com/tools.html
@@ -15,21 +19,25 @@ Requires:	openldap
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description 
-The MigrationTools are a set of Perl scripts for migrating users, groups,
-aliases, hosts, netgroups, networks, protocols, RPCs, and services from
-existing nameservices (flat files, NIS, and NetInfo) to LDAP.
+The MigrationTools are a set of Perl scripts for migrating users,
+groups, aliases, hosts, netgroups, networks, protocols, RPCs, and
+services from existing nameservices (flat files, NIS, and NetInfo) to
+LDAP.
+
+%description -l pl
+MigrationTools to zestaw skryptów perlowych do migracji u¿ytkowników,
+grup, hostów, grup sieciowych, sieci, protoko³ów, RPC i serwisów z
+istniej±cych serwisów nazw (zwyk³ych plików, NIS, NetInfo) do LDAP.
 
 %prep
 %setup -qn MigrationTools-%{version}
 install %{SOURCE1} .
 
-%build
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/%{_datadir}/MigrationTools
-install *.sh *.pl *.ph $RPM_BUILD_ROOT/%{_datadir}/MigrationTools
+install -d $RPM_BUILD_ROOT%{_datadir}/MigrationTools
+install *.sh *.pl *.ph $RPM_BUILD_ROOT%{_datadir}/MigrationTools
 
 gzip -9nf MigrationTools.txt README
 
