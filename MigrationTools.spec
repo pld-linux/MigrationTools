@@ -1,4 +1,4 @@
-# $Revision: 1.7 $Date: 2002-03-27 10:58:32 $
+# $Revision: 1.8 $Date: 2002-11-27 21:10:40 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl):	Narzêdzia do migraacji do LDAP
@@ -35,14 +35,12 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_datadir}/MigrationTools
 install *.sh *.pl *.ph $RPM_BUILD_ROOT%{_datadir}/MigrationTools
 
-gzip -9nf MigrationTools.txt README
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc MigrationTools.txt README
 %dir %{_datadir}/MigrationTools
 %attr(755,root,root) %{_datadir}/MigrationTools/*.sh
 %attr(755,root,root) %{_datadir}/MigrationTools/*.pl
