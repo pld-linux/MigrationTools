@@ -1,0 +1,103 @@
+Allow the calling user to pass in arguments to ldapadd/ldapmodify.
+
+--- MigrationTools-27/migrate_all_online.sh	Tue Oct 31 17:01:24 2000
++++ MigrationTools-27/migrate_all_online.sh	Tue Oct 31 17:03:19 2000
+@@ -181,13 +181,11 @@
+ 
+ echo "Importing into LDAP..."
+ 
+- if [ -x /usr/sbin/slapadd ]; then
+-   $LDAPADD -x -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" -f $DB
+- elif [ -x /usr/local/sbin/slapadd ]; then
+-   $LDAPADD -x -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" -f $DB
+- else
+-   $LDAPADD -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" -f $DB
+- fi
++if [ `basename $LDAPADD` = "slapadd" ]; then
++	$LDAPADD -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" $@ -f $DB
++else
++	$LDAPADD -x -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" $@ -f $DB
++fi
+ 
+ if [ $? -ne 0 ]; then
+ 	echo "$LDAPADD: returned non-zero exit status"
+--- MigrationTools-27/migrate_all_nis_online.sh	Tue Oct 31 17:01:24 2000
++++ MigrationTools-27/migrate_all_nis_online.sh	Tue Oct 31 17:02:51 2000
+@@ -71,7 +71,7 @@
+ ypcat $DOMFLAG networks > $ETC_NETWORKS
+ #ypcat $DOMFLAG -k aliases > $ETC_ALIASES
+ 
+-. ${INSTDIR}migrate_all_online.sh
++. ${INSTDIR}migrate_all_online.sh $@
+ 
+ rm -f $ETC_PASSWD
+ rm -f $ETC_GROUP
+--- MigrationTools-27/migrate_all_offline.sh	Tue Oct 31 17:02:00 2000
++++ MigrationTools-27/migrate_all_offline.sh	Tue Oct 31 17:03:12 2000
+@@ -137,9 +137,9 @@
+ $PERL -I${INSTDIR} ${INSTDIR}migrate_netgroup_byhost.pl	$ETC_NETGROUP >> $DB
+ echo "Preparing LDAP database..."
+ if [ "X$SLAPADD" = "X" ]; then
+-	$LDIF2LDBM -i $DB
++	$LDIF2LDBM -i $DB $@
+ else
+-	$SLAPADD -l $DB
++	$SLAPADD -l $DB $@
+ fi
+ EXITCODE=$?
+ 
+--- MigrationTools-27/migrate_all_nis_offline.sh	Tue Oct 31 17:02:05 2000
++++ MigrationTools-27/migrate_all_nis_offline.sh	Tue Oct 31 17:02:49 2000
+@@ -71,7 +71,7 @@
+ ypcat $DOMFLAG networks > $ETC_NETWORKS
+ #ypcat $DOMFLAG -k aliases > $ETC_ALIASES
+ 
+-. ${INSTDIR}migrate_all_offline.sh
++. ${INSTDIR}migrate_all_offline.sh $@
+ 
+ rm -f $ETC_PASSWD
+ rm -f $ETC_GROUP
+--- MigrationTools-27/migrate_all_nisplus_online.sh	Tue Oct 31 17:02:11 2000
++++ MigrationTools-27/migrate_all_nisplus_online.sh	Tue Oct 31 17:02:59 2000
+@@ -62,7 +62,7 @@
+ niscat networks.org_dir > $ETC_NETWORKS
+ niscat mail_aliases.org_dir > $ETC_ALIASES
+ 
+-. ${INSTDIR}migrate_all_online.sh
++. ${INSTDIR}migrate_all_online.sh $@
+ 
+ rm -f $ETC_PASSWD
+ rm -f $ETC_GROUP
+--- MigrationTools-27/migrate_all_netinfo_online.sh	Tue Oct 31 17:02:17 2000
++++ MigrationTools-27/migrate_all_netinfo_online.sh	Tue Oct 31 17:02:46 2000
+@@ -69,7 +69,7 @@
+ nidump networks $DOM > $ETC_NETWORKS
+ nidump aliases $DOM > $ETC_ALIASES
+ 
+-. ${INSTDIR}migrate_all_online.sh
++. ${INSTDIR}migrate_all_online.sh $@
+ 
+ rm -f $ETC_PASSWD
+ rm -f $ETC_GROUP
+--- MigrationTools-27/migrate_all_netinfo_offline.sh	Tue Oct 31 17:02:22 2000
++++ MigrationTools-27/migrate_all_netinfo_offline.sh	Tue Oct 31 17:02:43 2000
+@@ -69,7 +69,7 @@
+ nidump networks $DOM > $ETC_NETWORKS
+ nidump aliases $DOM > $ETC_ALIASES
+ 
+-. ${INSTDIR}migrate_all_offline.sh
++. ${INSTDIR}migrate_all_offline.sh $@
+ 
+ rm -f $ETC_PASSWD
+ rm -f $ETC_GROUP
+--- MigrationTools-27/migrate_all_nisplus_offline.sh	Tue Oct 31 17:02:27 2000
++++ MigrationTools-27/migrate_all_nisplus_offline.sh	Tue Oct 31 17:02:56 2000
+@@ -62,7 +62,7 @@
+ niscat networks.org_dir > $ETC_NETWORKS
+ niscat mail_aliases.org_dir > $ETC_ALIASES
+ 
+-. ${INSTDIR}migrate_all_offline.sh
++. ${INSTDIR}migrate_all_offline.sh $@
+ 
+ rm -f $ETC_PASSWD
+ rm -f $ETC_GROUP
