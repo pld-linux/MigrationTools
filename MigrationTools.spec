@@ -1,4 +1,4 @@
-# $Revision: 1.9 $Date: 2003-05-25 05:49:41 $
+# $Revision: 1.10 $Date: 2003-05-28 12:59:26 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl):	Narzêdzia do migraacji do LDAP
@@ -8,6 +8,7 @@ Release:	2
 License:	custom
 Group:		Base
 Source0:	http://www.padl.com/download/MigrationTools.tgz
+# Source0-md5:	2cc51cbf0276c161724626c70b59f0b1
 Source1:	http://www.padl.com/download/MigrationTools.txt
 URL:		http://www.padl.com/tools.html
 BuildRequires:	rpm-perlprov
