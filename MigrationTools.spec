@@ -1,16 +1,21 @@
-# $Revision: 1.10 $Date: 2003-05-28 12:59:26 $
+# $Revision: 1.11 $Date: 2003-07-14 17:22:01 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl):	Narzêdzia do migraacji do LDAP
 Name:		ldap-MigrationTools
-Version:	24
-Release:	2
+Version:	44
+Release:	1
 License:	custom
 Group:		Base
 Source0:	http://www.padl.com/download/MigrationTools.tgz
 # Source0-md5:	2cc51cbf0276c161724626c70b59f0b1
 Source1:	http://www.padl.com/download/MigrationTools.txt
 URL:		http://www.padl.com/tools.html
+Patch0:		MigrationTools-38-instdir.patch
+Patch1:		MigrationTools-36-mktemp.patch
+Patch2:		MigrationTools-27-simple.patch
+Patch3:		MigrationTools-26-suffix.patch
+Patch4:		MigrationTools-44-schema.patch
 BuildRequires:	rpm-perlprov
 Requires:	openldap
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -28,6 +33,11 @@ istniej±cych serwisów nazw (zwyk³ych plików, NIS, NetInfo) do LDAP.
 
 %prep
 %setup -qn MigrationTools-%{version}
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 install %{SOURCE1} .
 
 %install
