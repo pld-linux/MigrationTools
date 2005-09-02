@@ -1,4 +1,4 @@
-# $Revision: 1.15 $Date: 2005-08-31 19:48:38 $
+# $Revision: 1.16 $Date: 2005-09-02 19:06:43 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl):	Narzêdzia do migraacji do LDAP
@@ -7,15 +7,15 @@ Version:	46
 Release:	0.1
 License:	custom
 Group:		Base
-Source0:	http://www.padl.com/download/MigrationTools.tgz
+Source0:	http://www.padl.com/download/MigrationTools-%{version}.tgz
 # Source0-md5:	dc80548f76d6aeba2b51b15751e08b21
 Source1:	http://www.padl.com/download/MigrationTools.txt
-URL:		http://www.padl.com/tools.html
 Patch0:		MigrationTools-38-instdir.patch
 Patch1:		MigrationTools-36-mktemp.patch
 Patch2:		MigrationTools-27-simple.patch
 Patch3:		MigrationTools-26-suffix.patch
 Patch4:		MigrationTools-44-schema.patch
+URL:		http://www.padl.com/tools.html
 BuildRequires:	rpm-perlprov
 Requires:	openldap
 BuildArch:	noarch
@@ -56,4 +56,4 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/MigrationTools
 %attr(755,root,root) %{_datadir}/MigrationTools/*.sh
 %attr(755,root,root) %{_datadir}/MigrationTools/*.pl
-%config(noreplace) %verify(not md5 size mtime) %{_datadir}/MigrationTools/*.ph
+%config(noreplace) %verify(not md5 mtime size) %{_datadir}/MigrationTools/*.ph
