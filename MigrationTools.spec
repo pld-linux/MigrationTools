@@ -1,7 +1,7 @@
-# $Revision: 1.17 $Date: 2005-09-02 19:07:13 $
+# $Revision: 1.18 $Date: 2007-02-12 00:49:01 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
-Summary(pl):	Narz阣zia do migraacji do LDAP
+Summary(pl.UTF-8):   Narz臋dzia do migraacji do LDAP
 Name:		ldap-MigrationTools
 Version:	46
 Release:	0.1
@@ -27,10 +27,10 @@ groups, aliases, hosts, netgroups, networks, protocols, RPCs, and
 services from existing nameservices (flat files, NIS, and NetInfo) to
 LDAP.
 
-%description -l pl
-MigrationTools to zestaw skrypt體 perlowych do migracji u縴tkownik體,
-grup, host體, grup sieciowych, sieci, protoko丑w, RPC i serwis體 z
-istniej眂ych serwis體 nazw (zwyk硑ch plik體, NIS, NetInfo) do LDAP.
+%description -l pl.UTF-8
+MigrationTools to zestaw skrypt贸w perlowych do migracji u偶ytkownik贸w,
+grup, host贸w, grup sieciowych, sieci, protoko艂贸w, RPC i serwis贸w z
+istniej膮cych serwis贸w nazw (zwyk艂ych plik贸w, NIS, NetInfo) do LDAP.
 
 %prep
 %setup -qn MigrationTools-%{version}
