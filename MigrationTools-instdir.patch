@@ -7,7 +7,7 @@ magic to let them be called from anywhere.
  
  PATH=$PATH:.
  export PATH
-+INSTDIR=/usr/share/MigrationTools/
++INSTDIR=/usr/share/openldap/migration/
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -26,7 +26,7 @@ magic to let them be called from anywhere.
  
  PATH=$PATH:.
  export PATH
-+INSTDIR=/usr/share/MigrationTools/
++INSTDIR=/usr/share/openldap/migration/
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -45,7 +45,7 @@ magic to let them be called from anywhere.
  
  PATH=$PATH:.
  export PATH
-+INSTDIR=/usr/share/MigrationTools/
++INSTDIR=/usr/share/openldap/migration/
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -65,7 +65,7 @@ magic to let them be called from anywhere.
  PATH=$PATH:.
  export PATH
 -
-+INSTDIR=/usr/share/MigrationTools/
++INSTDIR=/usr/share/openldap/migration/
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -84,7 +84,7 @@ magic to let them be called from anywhere.
  
  PATH=$PATH:/usr/lib/nis:.
  export PATH
-+INSTDIR=/usr/share/MigrationTools/
++INSTDIR=/usr/share/openldap/migration/
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -104,7 +104,7 @@ magic to let them be called from anywhere.
  PATH=$PATH:.
  export PATH
 -
-+INSTDIR=/usr/share/MigrationTools/
++INSTDIR=/usr/share/openldap/migration/
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -123,7 +123,7 @@ magic to let them be called from anywhere.
  # Luke Howard <lukeh@padl.com> April 1997
  #
  
-+INSTDIR=/usr/share/MigrationTools/
++INSTDIR=/usr/share/openldap/migration/
  DB="/tmp/nis.$$.ldif"
  
  if [ "X$ETC_ALIASES" = "X" ]; then
@@ -179,7 +179,7 @@ magic to let them be called from anywhere.
  SHELL=/bin/sh
  export SHELL
  
-+INSTDIR=/usr/share/MigrationTools/
++INSTDIR=/usr/share/openldap/migration/
 +
  DB=/tmp/nis.$$.ldif
  
@@ -250,7 +250,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_aliases.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -261,7 +261,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
   
  $PROGRAM = "migrate_automount.pl"; 
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -272,7 +272,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_base.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -283,7 +283,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_fstab.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -294,7 +294,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_group.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -305,7 +305,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_hosts.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -316,7 +316,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_netgroup.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -327,7 +327,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_netgroup_byhost.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -338,7 +338,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_netgroup_byuser.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -349,7 +349,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_networks.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -360,7 +360,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_passwd.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -371,7 +371,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_profile.pl";
  
@@ -382,7 +382,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_protocols.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -393,7 +393,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_rpc.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -404,7 +404,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_services.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -415,7 +415,7 @@ magic to let them be called from anywhere.
  #
  
 -require 'migrate_common.ph';
-+require '/usr/share/MigrationTools/migrate_common.ph';
++require '/usr/share/openldap/migration/migrate_common.ph';
  
  $PROGRAM = "migrate_slapd_conf.pl";
  

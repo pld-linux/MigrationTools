@@ -1,0 +1,50 @@
+Supply dummy descriptions which, due to typos, are required.
+
+diff -uNr MigrationTools/migrate_protocols.pl MigrationTools/migrate_protocols.pl
+--- MigrationTools/migrate_protocols.pl	Thu Oct 12 00:50:34 2000
++++ MigrationTools/migrate_protocols.pl	Thu Oct 12 00:50:11 2000
+@@ -72,6 +72,7 @@
+ 	foreach $_ (@aliases) {
+ 		print $HANDLE "cn: $_\n";
+ 	}
++	print $HANDLE "description: IP protocol $number ($name)\n";
+ 	print $HANDLE "\n";
+ }
+ 
+diff -uNr MigrationTools/migrate_rpc.pl MigrationTools/migrate_rpc.pl
+--- MigrationTools/migrate_rpc.pl	Thu Oct 12 00:50:34 2000
++++ MigrationTools/migrate_rpc.pl	Thu Oct 12 00:50:11 2000
+@@ -74,6 +74,7 @@
+ 	foreach $_ (@aliases) {
+ 		print $HANDLE "cn: $_\n";
+ 	}
++	print $HANDLE "description: ONC RPC number $rpcnumber ($rpcname)\n";
+ 	print $HANDLE "\n";
+ }
+ 
+--- MigrationTools/migrate_common.ph	2002-07-09 23:59:22.000000000 -0400
++++ MigrationTools/migrate_common.ph	2003-05-02 16:58:19.000000000 -0400
+@@ -83,7 +83,7 @@
+ ##### CUT HERE #####
+ # where /etc/mail/ldapdomains contains names of ldap_routed
+ # domains (similiar to MASQUERADE_DOMAIN_FILE).
+-$DEFAULT_MAIL_HOST = "mail.padl.com";
++# $DEFAULT_MAIL_HOST = "mail.padl.com";
+ 
+ # turn this on to support more general object clases
+ # such as person.
+@@ -120,10 +120,10 @@
+ }
+ 
+ # Default Kerberos realm
+-if ($EXTENDED_SCHEMA) {
+-	$DEFAULT_REALM = $DEFAULT_MAIL_DOMAIN;
+-	$DEFAULT_REALM =~ tr/a-z/A-Z/;
+-}
++#if ($EXTENDED_SCHEMA) {
++#	$DEFAULT_REALM = $DEFAULT_MAIL_DOMAIN;
++#	$DEFAULT_REALM =~ tr/a-z/A-Z/;
++#}
+ 
+ if (-x "/usr/sbin/revnetgroup") {
+ 	$REVNETGROUP = "/usr/sbin/revnetgroup";

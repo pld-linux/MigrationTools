@@ -1,0 +1,23 @@
+Prevent duplicities in hosts, which are read from NIS.
+--- MigrationTools-46/migrate_all_nis_online.sh.orig	2007-05-24 11:21:54.000000000 +0200
++++ MigrationTools-46/migrate_all_nis_online.sh	2007-05-24 11:26:30.000000000 +0200
+@@ -67,7 +67,7 @@
+ ypcat $DOMFLAG protocols > $ETC_PROTOCOLS
+ touch $ETC_FSTAB
+ ypcat $DOMFLAG rpc.byname > $ETC_RPC
+-ypcat $DOMFLAG hosts > $ETC_HOSTS
++ypcat $DOMFLAG hosts.byaddr > $ETC_HOSTS
+ ypcat $DOMFLAG networks > $ETC_NETWORKS
+ #ypcat $DOMFLAG -k aliases > $ETC_ALIASES
+ 
+--- MigrationTools-46/migrate_all_nis_offline.sh.orig	2007-05-24 11:21:54.000000000 +0200
++++ MigrationTools-46/migrate_all_nis_offline.sh	2007-05-24 11:26:13.000000000 +0200
+@@ -67,7 +67,7 @@
+ ypcat $DOMFLAG protocols > $ETC_PROTOCOLS
+ touch $ETC_FSTAB
+ ypcat $DOMFLAG rpc.byname > $ETC_RPC
+-ypcat $DOMFLAG hosts > $ETC_HOSTS
++ypcat $DOMFLAG hosts.byaddr > $ETC_HOSTS
+ ypcat $DOMFLAG networks > $ETC_NETWORKS
+ #ypcat $DOMFLAG -k aliases > $ETC_ALIASES
+ 

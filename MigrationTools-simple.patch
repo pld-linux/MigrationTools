@@ -14,9 +14,9 @@ Allow the calling user to pass in arguments to ldapadd/ldapmodify.
 -   $LDAPADD -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" -f $DB
 - fi
 +if [ `basename $LDAPADD` = "slapadd" ]; then
-+	$LDAPADD -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" $@ -f $DB
++	$LDAPADD -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" "$@" -f $DB
 +else
-+	$LDAPADD -x -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" $@ -f $DB
++	$LDAPADD -x -h $LDAPHOST -D "$LDAP_BINDDN" -w "$LDAP_BINDCRED" "$@" -f $DB
 +fi
  
  if [ $? -ne 0 ]; then
@@ -28,7 +28,7 @@ Allow the calling user to pass in arguments to ldapadd/ldapmodify.
  #ypcat $DOMFLAG -k aliases > $ETC_ALIASES
  
 -. ${INSTDIR}migrate_all_online.sh
-+. ${INSTDIR}migrate_all_online.sh $@
++. ${INSTDIR}migrate_all_online.sh "$@"
  
  rm -f $ETC_PASSWD
  rm -f $ETC_GROUP
@@ -39,10 +39,10 @@ Allow the calling user to pass in arguments to ldapadd/ldapmodify.
  echo "Preparing LDAP database..."
  if [ "X$SLAPADD" = "X" ]; then
 -	$LDIF2LDBM -i $DB
-+	$LDIF2LDBM -i $DB $@
++	$LDIF2LDBM -i $DB "$@"
  else
 -	$SLAPADD -l $DB
-+	$SLAPADD -l $DB $@
++	$SLAPADD -l $DB "$@"
  fi
  EXITCODE=$?
  
@@ -53,7 +53,7 @@ Allow the calling user to pass in arguments to ldapadd/ldapmodify.
  #ypcat $DOMFLAG -k aliases > $ETC_ALIASES
  
 -. ${INSTDIR}migrate_all_offline.sh
-+. ${INSTDIR}migrate_all_offline.sh $@
++. ${INSTDIR}migrate_all_offline.sh "$@"
  
  rm -f $ETC_PASSWD
  rm -f $ETC_GROUP
@@ -64,7 +64,7 @@ Allow the calling user to pass in arguments to ldapadd/ldapmodify.
  niscat mail_aliases.org_dir > $ETC_ALIASES
  
 -. ${INSTDIR}migrate_all_online.sh
-+. ${INSTDIR}migrate_all_online.sh $@
++. ${INSTDIR}migrate_all_online.sh "$@"
  
  rm -f $ETC_PASSWD
  rm -f $ETC_GROUP
@@ -75,7 +75,7 @@ Allow the calling user to pass in arguments to ldapadd/ldapmodify.
  nidump aliases $DOM > $ETC_ALIASES
  
 -. ${INSTDIR}migrate_all_online.sh
-+. ${INSTDIR}migrate_all_online.sh $@
++. ${INSTDIR}migrate_all_online.sh "$@"
  
  rm -f $ETC_PASSWD
  rm -f $ETC_GROUP
@@ -86,7 +86,7 @@ Allow the calling user to pass in arguments to ldapadd/ldapmodify.
  nidump aliases $DOM > $ETC_ALIASES
  
 -. ${INSTDIR}migrate_all_offline.sh
-+. ${INSTDIR}migrate_all_offline.sh $@
++. ${INSTDIR}migrate_all_offline.sh "$@"
  
  rm -f $ETC_PASSWD
  rm -f $ETC_GROUP
@@ -97,7 +97,7 @@ Allow the calling user to pass in arguments to ldapadd/ldapmodify.
  niscat mail_aliases.org_dir > $ETC_ALIASES
  
 -. ${INSTDIR}migrate_all_offline.sh
-+. ${INSTDIR}migrate_all_offline.sh $@
++. ${INSTDIR}migrate_all_offline.sh "$@"
  
  rm -f $ETC_PASSWD
  rm -f $ETC_GROUP

@@ -1,0 +1,55 @@
+Don't migrate aliases by default, the schema used is no longer included in the
+default server configuration.
+
+--- MigrationTools-45/migrate_all_offline.sh	2004-10-05 17:36:58.000000000 -0400
++++ MigrationTools-45/migrate_all_offline.sh	2004-10-05 17:37:03.000000000 -0400
+@@ -44,9 +44,9 @@
+ INSTDIR=/usr/share/openldap/migration/
+ DB=`mktemp /tmp/nis.ldif.XXXXXX`
+ 
+-if [ "X$ETC_ALIASES" = "X" ]; then
+-	ETC_ALIASES=/etc/aliases
+-fi
++#if [ "X$ETC_ALIASES" = "X" ]; then
++#	ETC_ALIASES=/etc/aliases
++#fi
+ #if [ "X$ETC_FSTAB" = "X" ]; then
+ #	ETC_FSTAB=/etc/fstab
+ #fi
+@@ -110,8 +110,8 @@
+ 
+ echo "Creating naming context entries..."
+ $PERL -I${INSTDIR} ${INSTDIR}migrate_base.pl		> $DB
+-echo "Migrating aliases..."
+-$PERL -I${INSTDIR} ${INSTDIR}migrate_aliases.pl 	$ETC_ALIASES >> $DB
++#echo "Migrating aliases..."
++#$PERL -I${INSTDIR} ${INSTDIR}migrate_aliases.pl 	$ETC_ALIASES >> $DB
+ #echo "Migrating fstab..."
+ #$PERL -I${INSTDIR} ${INSTDIR}migrate_fstab.pl		$ETC_FSTAB >> $DB
+ echo "Migrating groups..."
+--- MigrationTools-45/migrate_all_online.sh	2004-10-05 17:37:11.000000000 -0400
++++ MigrationTools-45/migrate_all_online.sh	2004-10-05 17:37:26.000000000 -0400
+@@ -42,9 +42,9 @@
+ 
+ DB=`mktemp /tmp/nis.ldif.XXXXXX`
+ 
+-if [ "X$ETC_ALIASES" = "X" ]; then
+-	ETC_ALIASES=/etc/aliases
+-fi
++#if [ "X$ETC_ALIASES" = "X" ]; then
++#	ETC_ALIASES=/etc/aliases
++#fi
+ #if [ "X$ETC_FSTAB" = "X" ]; then
+ #	ETC_FSTAB=/etc/fstab
+ #fi
+@@ -167,8 +167,8 @@
+ 	echo "Creating DUAConfigProfile entry..."
+ 	$PERL -I${INSTDIR} ${INSTDIR}migrate_profile.pl "$LDAPHOST" >> $DB
+ fi
+-echo "Migrating aliases..."
+-$PERL -I${INSTDIR} ${INSTDIR}migrate_aliases.pl 	$ETC_ALIASES >> $DB
++#echo "Migrating aliases..."
++#$PERL -I${INSTDIR} ${INSTDIR}migrate_aliases.pl 	$ETC_ALIASES >> $DB
+ #echo "Migrating fstab..."
+ #$PERL -I${INSTDIR} ${INSTDIR}migrate_fstab.pl		$ETC_FSTAB >> $DB
+ echo "Migrating groups..."

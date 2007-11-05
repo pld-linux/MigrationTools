@@ -1,0 +1,36 @@
+Try adding the top-level object, which may be missing, but don't worry if
+the add operation fails.
+--- MigrationTools-26/migrate_all_online.sh	Wed Oct 25 16:27:02 2000
++++ MigrationTools-26/migrate_all_online.sh	Wed Oct 25 16:30:11 2000
+@@ -179,5 +179,31 @@
+ echo "Migrating netgroups (by host)..."
+ $PERL -I${INSTDIR} ${INSTDIR}migrate_netgroup_byhost.pl	$ETC_NETGROUP >> $DB
+ 
++# Try to add the top-level object, because it's frequently missing.
++NAMINGATTRNAME=`echo $LDAP_BASEDN | cut -f1 -d=`
++NAMINGATTRVALUE=`echo $LDAP_BASEDN | cut -f1 -d, | cut -f2 -d=`
++OBJECTCLASS=
++case "$NAMINGATTRNAME" in
++	dc)         OBJECTCLASS=domain;;
++	o)          OBJECTCLASS=organization;;
++	l)          OBJECTCLASS=locality;;
++	c)          OBJECTCLASS=country;;
++	nismapname) OBJECTCLASS=nisMap;;
++	cn)         OBJECTCLASS=container;;
++esac
++
++if test -n "$NAMINGATTRNAME" ; then
++if test -n "$NAMINGATTRVALUE" ; then
++if test -n "$OBJECTCLASS" ; then
++cat << EOF | $LDAPADD -h $LDAPHOST -D "$LDAP_BINDDN" -x -w "$LDAP_BINDCRED"
++dn: $LDAP_BASEDN
++$NAMINGATTRNAME: $NAMINGATTRVALUE
++objectClass: top
++objectClass: $OBJECTCLASS
++EOF
++fi
++fi
++fi
++
+ echo "Importing into LDAP..."
+ 
