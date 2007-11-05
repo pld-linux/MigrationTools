@@ -1,0 +1,16 @@
+diff -ur MigrationTools-47/migrate_services.pl MigrationTools-47-noproto/migrate_services.pl
+--- MigrationTools-47/migrate_services.pl	2007-11-06 00:44:31.000000000 +0100
++++ MigrationTools-47-noproto/migrate_services.pl	2007-11-06 00:43:54.000000000 +0100
+@@ -102,6 +102,12 @@
+ 		my ($servicename, $portproto, @aliases) = split(m/\s+/o, $card);
+ 		my ($rawport, $proto) = split(m#[/,]#o, $portproto);
+ 
++		# skip services without protocols
++		if (!defined($proto)) {
++                    print STDERR "Skipping no-protocol service '$servicename $portproto'\n";
++                    next; 
++		}
++
+ 		# do not generate ddp services - it's AppleTalk, not IP
+                 if ($proto eq "ddp") { 
+                     print STDERR "Skipping non-IP service '$servicename $portproto'\n";
