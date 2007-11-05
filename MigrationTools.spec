@@ -1,12 +1,12 @@
-# $Revision: 1.20 $Date: 2007-11-05 16:48:35 $
+# $Revision: 1.21 $Date: 2007-11-05 17:28:24 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl.UTF-8):	Narzędzia do migraacji do LDAP
 Name:		MigrationTools
 Version:	47
-Release:	0.1
+Release:	1
 License:	BSD
-Group:		Base
+Group:		Networking/Admin
 Source0:	http://www.padl.com/download/%{name}-%{version}.tar.gz
 # Source0-md5:	3faf83eb8482e55979bda47f1d1e6501
 # http://www.padl.com/download/MigrationTools.txt
