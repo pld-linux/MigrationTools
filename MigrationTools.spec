@@ -1,23 +1,27 @@
-# $Revision: 1.19 $Date: 2007-02-13 06:46:50 $
+# $Revision: 1.20 $Date: 2007-11-05 16:48:35 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl.UTF-8):	Narzędzia do migraacji do LDAP
-Name:		ldap-MigrationTools
-Version:	46
+Name:		MigrationTools
+Version:	47
 Release:	0.1
-License:	custom
+License:	BSD
 Group:		Base
-Source0:	http://www.padl.com/download/MigrationTools-%{version}.tar.gz
-# Source0-md5:	dc80548f76d6aeba2b51b15751e08b21
-Source1:	http://www.padl.com/download/MigrationTools.txt
-Patch0:		MigrationTools-38-instdir.patch
-Patch1:		MigrationTools-36-mktemp.patch
-Patch2:		MigrationTools-27-simple.patch
-Patch3:		MigrationTools-26-suffix.patch
-Patch4:		MigrationTools-44-schema.patch
-URL:		http://www.padl.com/tools.html
+Source0:	http://www.padl.com/download/%{name}-%{version}.tar.gz
+# Source0-md5:	3faf83eb8482e55979bda47f1d1e6501
+# http://www.padl.com/download/MigrationTools.txt
+Source1:	%{name}.txt
+Patch0:		%{name}-instdir.patch
+Patch1:		%{name}-mktemp.patch
+Patch2:		%{name}-simple.patch
+Patch3:		%{name}-suffix.patch
+Patch4:		%{name}-schema.patch
+Patch5:		%{name}-noaliases.patch
+Patch6:		%{name}-noddp.patch
+Patch7:		%{name}-unique-hosts.patch
+Patch8:		%{name}-sysconfdir.patch
+URL:		http://www.padl.com/OSS/MigrationTools.html
 BuildRequires:	rpm-perlprov
-Requires:	openldap
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -32,28 +36,54 @@ MigrationTools to zestaw skryptów perlowych do migracji użytkowników,
 grup, hostów, grup sieciowych, sieci, protokołów, RPC i serwisów z
 istniejących serwisów nazw (zwykłych plików, NIS, NetInfo) do LDAP.
 
+%package -n openldap-migration
+Summary:	LDAP Migration Tools
+Summary(pl.UTF-8):	Narzędzia do migraacji do LDAP
+Group:		Base
+Requires:	openldap
+Obsoletes:	ldap-MigrationTools
+
+%description -n openldap-migration
+The MigrationTools are a set of Perl scripts for migrating users,
+groups, aliases, hosts, netgroups, networks, protocols, RPCs, and
+services from existing nameservices (flat files, NIS, and NetInfo) to
+LDAP.
+
+%description -n openldap-migration -l pl.UTF-8
+MigrationTools to zestaw skryptów perlowych do migracji użytkowników,
+grup, hostów, grup sieciowych, sieci, protokołów, RPC i serwisów z
+istniejących serwisów nazw (zwykłych plików, NIS, NetInfo) do LDAP.
+
 %prep
-%setup -qn MigrationTools-%{version}
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
 install %{SOURCE1} .
+
+perl -pi -e 's|%%CONFDIR%%|%{_sysconfdir}/openldap/|g;\
+	s|%%INSTDIR%%|%{_datadir}/openldap/migration/|g' *.pl *.sh README
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT{%{_sysconfdir}/openldap,%{_datadir}/openldap/migration}
 
-install -d $RPM_BUILD_ROOT%{_datadir}/MigrationTools
-install *.sh *.pl *.ph $RPM_BUILD_ROOT%{_datadir}/MigrationTools
+install *.sh *.pl $RPM_BUILD_ROOT%{_datadir}/openldap/migration
+install migrate_common.ph $RPM_BUILD_ROOT%{_sysconfdir}/openldap
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -n openldap-migration
 %defattr(644,root,root,755)
 %doc MigrationTools.txt README
-%dir %{_datadir}/MigrationTools
-%attr(755,root,root) %{_datadir}/MigrationTools/*.sh
-%attr(755,root,root) %{_datadir}/MigrationTools/*.pl
-%config(noreplace) %verify(not md5 mtime size) %{_datadir}/MigrationTools/*.ph
+%dir %{_datadir}/openldap/migration
+%attr(755,root,root) %{_datadir}/openldap/migration/*.sh
+%attr(755,root,root) %{_datadir}/openldap/migration/*.pl
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/openldap/migrate_common.ph
