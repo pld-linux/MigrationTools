@@ -7,7 +7,7 @@ magic to let them be called from anywhere.
  
  PATH=$PATH:.
  export PATH
-+INSTDIR=/usr/share/openldap/migration/
++INSTDIR=%INSTDIR%
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -26,7 +26,7 @@ magic to let them be called from anywhere.
  
  PATH=$PATH:.
  export PATH
-+INSTDIR=/usr/share/openldap/migration/
++INSTDIR=%INSTDIR%
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -45,7 +45,7 @@ magic to let them be called from anywhere.
  
  PATH=$PATH:.
  export PATH
-+INSTDIR=/usr/share/openldap/migration/
++INSTDIR=%INSTDIR%
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -65,7 +65,7 @@ magic to let them be called from anywhere.
  PATH=$PATH:.
  export PATH
 -
-+INSTDIR=/usr/share/openldap/migration/
++INSTDIR=%INSTDIR%
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -84,7 +84,7 @@ magic to let them be called from anywhere.
  
  PATH=$PATH:/usr/lib/nis:.
  export PATH
-+INSTDIR=/usr/share/openldap/migration/
++INSTDIR=%INSTDIR%
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -104,7 +104,7 @@ magic to let them be called from anywhere.
  PATH=$PATH:.
  export PATH
 -
-+INSTDIR=/usr/share/openldap/migration/
++INSTDIR=%INSTDIR%
  
  TMPDIR="/tmp"
  ETC_PASSWD="$TMPDIR/passwd.$$.ldap"
@@ -123,7 +123,7 @@ magic to let them be called from anywhere.
  # Luke Howard <lukeh@padl.com> April 1997
  #
  
-+INSTDIR=/usr/share/openldap/migration/
++INSTDIR=%INSTDIR%
  DB="/tmp/nis.$$.ldif"
  
  if [ "X$ETC_ALIASES" = "X" ]; then
@@ -179,7 +179,7 @@ magic to let them be called from anywhere.
  SHELL=/bin/sh
  export SHELL
  
-+INSTDIR=/usr/share/openldap/migration/
++INSTDIR=%INSTDIR%
 +
  DB=/tmp/nis.$$.ldif
  
