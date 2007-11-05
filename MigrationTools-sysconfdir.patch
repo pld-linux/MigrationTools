@@ -6,7 +6,7 @@ diff -ur MigrationTools-47/migrate_aliases.pl MigrationTools-47-etc/migrate_alia
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_aliases.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -18,7 +18,7 @@ diff -ur MigrationTools-47/migrate_all_offline.sh MigrationTools-47-etc/migrate_
  # Migrate all entities from flat files. 
  #
 -# Make sure that you configure migrate_common.ph to suit
-+# Make sure that you configure @@SYSCONFDIR@@migrate_common.ph to suit
++# Make sure that you configure @@CONFDIR%migrate_common.ph to suit
  # your site's X.500 naming context and DNS mail domain;
  # the defaults may not be correct.
  #
@@ -30,7 +30,7 @@ diff -ur MigrationTools-47/migrate_all_online.sh MigrationTools-47-etc/migrate_a
  
  if [ "X$LDAP_BASEDN" = "X" ]; then
 -	defaultcontext=`$PERL -e 'require "migrate_common.ph"; print \$DEFAULT_BASE';`
-+	defaultcontext=`$PERL -e 'require "@@SYSCONFDIR@@migrate_common.ph"; print \$DEFAULT_BASE';`
++	defaultcontext=`$PERL -e 'require "%CONFDIR%migrate_common.ph"; print \$DEFAULT_BASE';`
  	question="Enter the X.500 naming context you wish to import into: [$defaultcontext]"
  	echo "$question " | tr -d '\012' > /dev/tty
  	read LDAP_BASEDN
@@ -42,7 +42,7 @@ diff -ur MigrationTools-47/migrate_automount.pl MigrationTools-47-etc/migrate_au
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
   
  $PROGRAM = "migrate_automount.pl"; 
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -54,7 +54,7 @@ diff -ur MigrationTools-47/migrate_base.pl MigrationTools-47-etc/migrate_base.pl
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_base.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -66,7 +66,7 @@ diff -ur MigrationTools-47/migrate_fstab.pl MigrationTools-47-etc/migrate_fstab.
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_fstab.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -78,7 +78,7 @@ diff -ur MigrationTools-47/migrate_group.pl MigrationTools-47-etc/migrate_group.
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_group.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -90,7 +90,7 @@ diff -ur MigrationTools-47/migrate_hosts.pl MigrationTools-47-etc/migrate_hosts.
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_hosts.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -102,7 +102,7 @@ diff -ur MigrationTools-47/migrate_netgroup_byhost.pl MigrationTools-47-etc/migr
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_netgroup_byhost.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -114,7 +114,7 @@ diff -ur MigrationTools-47/migrate_netgroup_byuser.pl MigrationTools-47-etc/migr
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_netgroup_byuser.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -126,7 +126,7 @@ diff -ur MigrationTools-47/migrate_netgroup.pl MigrationTools-47-etc/migrate_net
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_netgroup.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -138,7 +138,7 @@ diff -ur MigrationTools-47/migrate_networks.pl MigrationTools-47-etc/migrate_net
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_networks.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -146,11 +146,11 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-etc/migrate_passw
 --- MigrationTools-47/migrate_passwd.pl	2006-01-25 05:18:16.000000000 +0100
 +++ MigrationTools-47-etc/migrate_passwd.pl	2007-11-05 17:17:05.897177898 +0100
 @@ -37,7 +37,7 @@
- # Thanks to Peter Jacob Slot <peter@vision.auk.dk>.
+ # Thanks to Peter Jacob Slot <peter%vision.auk.dk>.
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_passwd.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -162,7 +162,7 @@ diff -ur MigrationTools-47/migrate_profile.pl MigrationTools-47-etc/migrate_prof
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_profile.pl";
  
@@ -174,7 +174,7 @@ diff -ur MigrationTools-47/migrate_protocols.pl MigrationTools-47-etc/migrate_pr
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_protocols.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -186,7 +186,7 @@ diff -ur MigrationTools-47/migrate_rpc.pl MigrationTools-47-etc/migrate_rpc.pl
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_rpc.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -198,7 +198,7 @@ diff -ur MigrationTools-47/migrate_services.pl MigrationTools-47-etc/migrate_ser
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_services.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
@@ -210,7 +210,7 @@ diff -ur MigrationTools-47/migrate_slapd_conf.pl MigrationTools-47-etc/migrate_s
  #
  
 -require 'migrate_common.ph';
-+require '@@SYSCONFDIR@@migrate_common.ph';
++require '%CONFDIR%migrate_common.ph';
  
  $PROGRAM = "migrate_slapd_conf.pl";
  
@@ -222,7 +222,7 @@ diff -ur MigrationTools-47/README MigrationTools-47-etc/README
  You need perl to run these.
  
 -Edit migrate_common.ph and change the following site-specific
-+Edit @@SYSCONFDIR@@migrate_common.ph and change the following site-specific
++Edit @@CONFDIR%migrate_common.ph and change the following site-specific
  variables to reflect your installation:
  
  $DEFAULT_MAIL_DOMAIN 
