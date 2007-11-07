@@ -1,0 +1,71 @@
+diff -ur MigrationTools-47/migrate_group.pl MigrationTools-47-minmax-ugid/migrate_group.pl
+--- MigrationTools-47/migrate_group.pl	2007-11-07 17:52:40.000000000 +0100
++++ MigrationTools-47-minmax-ugid/migrate_group.pl	2007-11-07 17:50:15.000000000 +0100
+@@ -41,6 +41,22 @@
+ $PROGRAM = "migrate_group.pl";
+ $NAMINGCONTEXT = &getsuffix($PROGRAM);
+ 
++if ($#ARGV < 0) {
++	print STDERR "Usage: $PROGRAM [--mingid N] [--maxgid M] infile [outfile]\n";
++	exit 1;
++}
++
++while ($ARGV[0] =~ /^--.*/) {
++	if ($ARGV[0] eq "--mingid") {
++		$mingid = $ARGV[1];
++		shift ; shift;
++	} elsif ($ARGV[0] eq "--maxgid") {
++		$maxgid = $ARGV[1];
++		shift ; shift;
++	} else {
++		shift;
++	}
++}
+ &parse_args();
+ &open_files();
+ 
+@@ -51,6 +67,8 @@
+ 	next if /^\+/;
+ 
+ 	local($group, $pwd, $gid, $users) = split(/:/);
++	next if (defined($mingid) and ($gid < $mingid));
++	next if (defined($maxgid) and ($gid > $maxgid));
+ 	
+ 	if ($use_stdout) {
+ 		&dump_group(STDOUT, $group, $pwd, $gid, $users);
+diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-minmax-ugid/migrate_passwd.pl
+--- MigrationTools-47/migrate_passwd.pl	2007-11-07 17:52:40.000000000 +0100
++++ MigrationTools-47-minmax-ugid/migrate_passwd.pl	2007-11-07 17:52:03.000000000 +0100
+@@ -42,6 +42,23 @@
+ $PROGRAM = "migrate_passwd.pl";
+ $NAMINGCONTEXT = &getsuffix($PROGRAM);
+ 
++if ($#ARGV < 0) {
++	print STDERR "Usage: $PROGRAM [--minuid N] [--maxuid M] infile [outfile]\n";
++	exit 1;
++}
++
++while ($ARGV[0] =~ /^--.*/) {
++	if ($ARGV[0] eq "--minuid") {
++		$minuid = $ARGV[1];
++		shift ; shift;
++	} elsif ($ARGV[0] eq "--maxuid") {
++		$maxuid = $ARGV[1];
++		shift ; shift;
++	} else {
++		shift;
++	}
++}
++
+ &parse_args();
+ &read_shadow_file();
+ &open_files();
+@@ -76,6 +93,8 @@
+ 	s/å/ae/g;
+ 
+ 	local($user, $pwd, $uid, $gid, $gecos, $homedir, $shell) = split(/:/);
++	next if (defined($minuid) and ($uid < $minuid));
++	next if (defined($maxuid) and ($uid > $maxuid));
+ 	
+ 	if ($use_stdout) {
+ 		&dump_user(STDOUT, $user, $pwd, $uid, $gid, $gecos, $homedir, $shell);
