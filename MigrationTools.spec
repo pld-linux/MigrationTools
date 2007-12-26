@@ -1,7 +1,7 @@
-# $Revision: 1.23 $Date: 2007-11-07 17:06:37 $
+# $Revision: 1.24 $Date: 2007-12-26 01:20:29 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
-Summary(pl.UTF-8):	Narzędzia do migraacji do LDAP
+Summary(pl.UTF-8):	Narzędzia do migracji do LDAP
 Name:		MigrationTools
 Version:	47
 Release:	3
@@ -40,7 +40,7 @@ istniejących serwisów nazw (zwykłych plików, NIS, NetInfo) do LDAP.
 
 %package -n openldap-migration
 Summary:	LDAP Migration Tools
-Summary(pl.UTF-8):	Narzędzia do migraacji do LDAP
+Summary(pl.UTF-8):	Narzędzia do migracji do LDAP
 Group:		Base
 Requires:	openldap
 Obsoletes:	ldap-MigrationTools
