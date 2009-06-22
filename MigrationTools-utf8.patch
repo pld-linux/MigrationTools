@@ -1,0 +1,52 @@
+diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47.x/migrate_passwd.pl
+--- MigrationTools-47/migrate_passwd.pl	2009-06-22 14:37:33.091177870 +0200
++++ MigrationTools-47.x/migrate_passwd.pl	2009-06-22 14:27:03.000000000 +0200
+@@ -39,6 +39,9 @@
+ 
+ require '/etc/openldap/migrate_common.ph';
+ 
++use Text::Iconv;
++$converter = Text::Iconv->new("UTF-8", "ASCII//TRANSLIT");
++
+ $PROGRAM = "migrate_passwd.pl";
+ $NAMINGCONTEXT = &getsuffix($PROGRAM);
+ 
+@@ -70,28 +73,6 @@
+ 	next if /^#/;
+ 	next if /^\+/;
+ 
+-	s/Ä/Ae/g;
+-	s/Ë/Ee/g;
+-	s/Ï/Ie/g;
+-	s/Ö/Oe/g;
+-	s/Ü/Ue/g;
+-
+-	s/ä/ae/g;
+-	s/ë/ee/g;
+-	s/ï/ie/g;
+-	s/ö/oe/g;
+-	s/ü/ue/g;
+-	s/ÿ/ye/g;
+-	s/ß/ss/g;
+-	s/é/e/g;
+-
+-	s/Æ/Ae/g;
+-	s/æ/ae/g;
+-	s/Ø/Oe/g;
+-	s/ø/oe/g;
+-	s/Å/Ae/g;
+-	s/å/ae/g;
+-
+ 	local($user, $pwd, $uid, $gid, $gecos, $homedir, $shell) = split(/:/);
+ 	next if (defined($minuid) and ($uid < $minuid));
+ 	next if (defined($maxuid) and ($uid > $maxuid));
+@@ -193,7 +174,8 @@
+ 	}
+ 
+ 	if ($gecos) {
+-		print $HANDLE "gecos: $gecos\n";
++		$cgecos = $converter->convert($gecos);
++		print $HANDLE "gecos: $cgecos\n";
+ 	}
+ 
+ 	print $HANDLE "\n";
