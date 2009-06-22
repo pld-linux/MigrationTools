@@ -1,0 +1,56 @@
+diff -ur MigrationTools-47/migrate_common.ph MigrationTools-47-krb5/migrate_common.ph
+--- MigrationTools-47/migrate_common.ph	2009-06-22 16:16:02.730586333 +0200
++++ MigrationTools-47-krb5/migrate_common.ph	2009-06-22 16:15:55.070581897 +0200
+@@ -120,10 +120,16 @@
+ }
+ 
+ # Default Kerberos realm
+-#if ($EXTENDED_SCHEMA) {
+-#	$DEFAULT_REALM = $DEFAULT_MAIL_DOMAIN;
+-#	$DEFAULT_REALM =~ tr/a-z/A-Z/;
+-#}
++if ($EXTENDED_SCHEMA) {
++	$DEFAULT_REALM = $DEFAULT_MAIL_DOMAIN;
++	$DEFAULT_REALM =~ tr/a-z/A-Z/;
++}
++
++# Default SMB Domain
++if ($EXTENDED_SCHEMA) {
++	$DEFAULT_SMB_DOMAIN = $DEFAULT_MAIL_DOMAIN;
++	$DEFAULT_SMB_DOMAIN =~ tr/a-z/A-Z/;
++}
+ 
+ if (-x "/usr/sbin/revnetgroup") {
+ 	$REVNETGROUP = "/usr/sbin/revnetgroup";
+Only in MigrationTools-47-krb5: migrate_common.ph~
+diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_passwd.pl
+--- MigrationTools-47/migrate_passwd.pl	2009-06-22 16:16:02.850581340 +0200
++++ MigrationTools-47-krb5/migrate_passwd.pl	2009-06-22 16:13:13.997264191 +0200
+@@ -138,7 +138,15 @@
+ 	print $HANDLE "objectClass: top\n";
+ 
+ 	if ($DEFAULT_REALM) {
+-		print $HANDLE "objectClass: kerberosSecurityObject\n";
++		print $HANDLE "objectClass: krb5Principal\n";
++		print $HANDLE "objectClass: krb5KDCEntry\n";
++		print $HANDLE "krb5PrincipalName: $user\@$DEFAULT_REALM\n";
++		print $HANDLE "krb5KeyVersionNumber: 0\n";
++	}
++
++	if ($DEFAULT_SMB_DOMAIN) {
++		print $HANDLE "objectClass: sambaSamAccount\n";
++		print $HANDLE "sambaSID: 0\n";
+ 	}
+ 
+ 	if ($shadowUsers{$user} ne "") {
+@@ -147,10 +155,6 @@
+ 		print $HANDLE "userPassword: {crypt}$pwd\n";
+ 	}
+ 
+-	if ($DEFAULT_REALM) {
+-		print $HANDLE "krbName: $user\@$DEFAULT_REALM\n";
+-	}
+-
+ 	if ($shell) {
+ 		print $HANDLE "loginShell: $shell\n";
+ 	}
