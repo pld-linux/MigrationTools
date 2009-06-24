@@ -100,3 +100,18 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_pass
 +	}
 +	close(INPUT);
 +}
+diff -ur MigrationTools-47/migrate_group.pl MigrationTools-47-krb5/migrate_group.pl
+--- MigrationTools-47/migrate_group.pl	2009-06-23 17:02:54.982471778 +0200
++++ MigrationTools-47-krb5/migrate_group.pl	2009-06-24 13:43:59.759317493 +0200
+@@ -86,6 +86,11 @@
+ 	print $HANDLE "dn: cn=$group,$NAMINGCONTEXT\n";
+ 	print $HANDLE "objectClass: posixGroup\n";
+ 	print $HANDLE "objectClass: top\n";
++	if ($DEFAULT_SMB_SID) {
++		print $HANDLE "objectClass: sambaGroupMapping\n";
++		print $HANDLE "sambaSID: $DEFAULT_SMB_SID-$gid\n";
++		print $HANDLE "sambaGroupType: 2\n";
++	}
+ 	print $HANDLE "cn: $group\n";
+ 	if ($pwd) {
+ 		print $HANDLE "userPassword: {crypt}$pwd\n";
