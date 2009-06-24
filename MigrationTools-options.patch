@@ -1,0 +1,57 @@
+diff -ur MigrationTools-47/migrate_passwd.pl x/migrate_passwd.pl
+--- MigrationTools-47/migrate_passwd.pl	2009-06-24 13:47:15.299291875 +0200
++++ x/migrate_passwd.pl	2009-06-24 16:26:58.000000000 +0200
+@@ -46,12 +46,20 @@
+ $NAMINGCONTEXT = &getsuffix($PROGRAM);
+ 
+ if ($#ARGV < 0) {
+-	print STDERR "Usage: $PROGRAM [--minuid N] [--maxuid M] infile [outfile]\n";
++	print STDERR "Usage: $PROGRAM [options] infile [outfile]\n";
++	print STDERR "  Options:\n";
++	print STDERR "	--minuid N	Minimal UID number to migrate\n";
++	print STDERR "	--maxuid M	Maximal UIF number to migrate\n";
++	print STDERR "	--samba		Migrate smbpasswd\n";
++	print STDERR "	-s FILE		Path to shadow file (default: /etc/shadow)\n";
++	print STDERR "	-S FILE		Path to smbpasswd file (default: /etc/samba/smbpasswd)\n";
+ 	exit 1;
+ }
+ 
+ $do_samba = 0;
+-while ($ARGV[0] =~ /^--.*/) {
++$shadowf = "/etc/shadow";
++$smbpassf = "/etc/samba/smbpasswd";
++while ($ARGV[0] =~ /^-.*/) {
+ 	if ($ARGV[0] eq "--minuid") {
+ 		$minuid = $ARGV[1];
+ 		shift ; shift;
+@@ -61,6 +69,12 @@
+ 	} elsif ($ARGV[0] eq "--samba") {
+ 		$do_samba = 1;
+ 		shift;
++	} elsif ($ARGV[0] eq "-s") {
++		$shadowf = $ARGV[1];
++		shift ; shift;
++	} elsif ($ARGV[0] eq "-S") {
++		$smbpassf = $ARGV[1];
++		shift ; shift;
+ 	} else {
+ 		shift;
+ 	}
+@@ -208,7 +222,7 @@
+ 
+ sub read_shadow_file
+ {
+-	open(SHADOW, "/etc/shadow") || return;
++	open(SHADOW, $shadowf) || return;
+ 	while(<SHADOW>) {
+ 		chop;
+ 		($shadowUser) = split(/:/, $_);
+@@ -250,7 +264,7 @@
+ 
+ sub read_samba
+ {
+-	open(INPUT, "</etc/samba/smbpasswd");
++	open(INPUT, "<$smbpassf");
+ 	while (<INPUT>) {
+ 		my ($sambaUser, $id, $lmp, $ntp, $f, $lf, $xxx) = split(':');
+ 		$sambaUsers{$sambaUser}->{"sambaLMPassword"} = $lmp;
