@@ -1,28 +1,17 @@
-diff -ruN migrationtools-47.orig/migrate_common.ph migrationtools-47/migrate_common.ph
---- migrationtools-47.orig/migrate_common.ph	2006-01-25 05:18:16.000000000 +0100
-+++ migrationtools-47/migrate_common.ph	2007-04-07 00:05:52.000000000 +0200
-@@ -89,6 +89,9 @@
- # such as person.
- $EXTENDED_SCHEMA = 0;
+diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47.x/migrate_passwd.pl
+--- MigrationTools-47/migrate_passwd.pl	2009-06-22 14:37:33.091177870 +0200
++++ MigrationTools-47.x/migrate_passwd.pl	2009-06-22 14:27:03.000000000 +0200
+@@ -39,6 +39,9 @@
  
-+# Comment this out if your ldap server does not support UTF8 encoding
-+$USE_UTF8 = 1;
+ require '/etc/openldap/migrate_common.ph';
+ 
++use Text::Iconv;
++$converter = Text::Iconv->new("UTF-8", "ASCII//TRANSLIT");
 +
- #
- # allow environment variables to override predefines
- #
-diff -ruN migrationtools-47.orig/migrate_passwd.pl migrationtools-47/migrate_passwd.pl
---- migrationtools-47.orig/migrate_passwd.pl	2006-01-25 05:18:16.000000000 +0100
-+++ migrationtools-47/migrate_passwd.pl	2007-04-07 00:06:13.000000000 +0200
-@@ -36,6 +36,7 @@
- #
- # Thanks to Peter Jacob Slot <peter@vision.auk.dk>.
- #
-+# UTF8 support by Jonas Smedegaard <dr@jones.dk>.
+ $PROGRAM = "migrate_passwd.pl";
+ $NAMINGCONTEXT = &getsuffix($PROGRAM);
  
- require 'migrate_common.ph';
- 
-@@ -53,28 +54,6 @@
+@@ -70,28 +73,6 @@
  	next if /^#/;
  	next if /^\+/;
  
@@ -49,225 +38,15 @@ diff -ruN migrationtools-47.orig/migrate_passwd.pl migrationtools-47/migrate_pas
 -	s/å/ae/g;
 -
  	local($user, $pwd, $uid, $gid, $gecos, $homedir, $shell) = split(/:/);
- 	
- 	if ($use_stdout) {
-@@ -100,25 +79,25 @@
- 	$sn = $tmp[$#tmp];
- 	pop(@tmp);
- 	$givenname=join(' ',@tmp);
--	
-+
- 	print $HANDLE "dn: uid=$user,$NAMINGCONTEXT\n";
- 	print $HANDLE "uid: $user\n";
--	print $HANDLE "cn: $cn\n";
-+	&print_utf8($HANDLE, "cn", $cn);
- 
- 	if ($EXTENDED_SCHEMA) {
- 		if ($wphone) {
--			print $HANDLE "telephoneNumber: $wphone\n";
-+			&print_utf8($HANDLE, "telephoneNumber", $wphone);
- 		}
- 		if ($office) {
--			print $HANDLE "roomNumber: $office\n";
-+			&print_utf8($HANDLE, "roomNumber", $office);
- 		}
- 		if ($hphone) {
--			print $HANDLE "homePhone: $hphone\n";
-+			&print_utf8($HANDLE, "homePhone", $hphone);
- 		}
- 		if ($givenname) {
--			print $HANDLE "givenName: $givenname\n";
-+			&print_utf8($HANDLE, "givenName", $givenname);
- 		}
--		print $HANDLE "sn: $sn\n";
-+		&print_utf8($HANDLE, "sn", $sn);
- 		if ($DEFAULT_MAIL_DOMAIN) {
- 			print $HANDLE "mail: $user\@$DEFAULT_MAIL_DOMAIN\n";
- 		}
-@@ -174,7 +153,7 @@
+ 	next if (defined($minuid) and ($uid < $minuid));
+ 	next if (defined($maxuid) and ($uid > $maxuid));
+@@ -193,7 +174,8 @@
  	}
  
  	if ($gecos) {
 -		print $HANDLE "gecos: $gecos\n";
-+		&print_ascii($HANDLE, "gecos", $gecos);
++		$cgecos = $converter->convert($gecos);
++		print $HANDLE "gecos: $cgecos\n";
  	}
  
  	print $HANDLE "\n";
-@@ -225,3 +204,177 @@
- 	}
- }
- 
-+sub print_utf8
-+{
-+	my($HANDLE, $attribute, $content) = @_;
-+
-+	if (&validate_ascii($content)) {
-+		print $HANDLE "$attribute: $content\n";
-+	} elsif ($USE_UTF8) {
-+#		$content = &recode_custom_to_utf8($content);
-+		$content = &recode_latin1_to_utf8($content);
-+		if (&validate_utf8($content)) {
-+			$content = &encode_base64($content, "");
-+			print $HANDLE "$attribute\:: $content\n";
-+		} else {
-+			die "ERROR: Illegal character(s) in UTF-8 string: \"$content\"";
-+		}
-+	} else {
-+		&print_ascii($HANDLE, "$attribute", "$content");
-+	}
-+}
-+
-+sub print_ascii
-+{
-+	my($HANDLE, $attribute, $content) = @_;
-+
-+	if (&validate_utf8($content)) {
-+		$content = &recode_utf8_to_latin1($content);
-+	} else {
-+		$content = &recode_latin1_to_utf8($content);
-+		$content = &recode_utf8_to_latin1($content);
-+	}
-+	$content = &recode_custom_to_ascii($content);
-+	if (&validate_ascii($content)) {
-+		print $HANDLE "$attribute: $content\n";
-+	} else {
-+		my $badchars = $content;
-+		for ($badchars) {
-+			s/[\x20-\x7E]//g;
-+		}
-+		die "ERROR: Illegal character(s) \"$badchars\" in ASCII string: \"$content\"";
-+	}
-+}
-+
-+sub recode_latin1_to_utf8
-+{
-+	my ($content) = @_;
-+	for ($content) {
-+		s/([\x80-\xFF])/chr(0xC0|ord($1)>>6).chr(0x80|ord($1)&0x3F)/eg;
-+	}
-+	return ($content)
-+}
-+
-+sub recode_utf8_to_latin1
-+{
-+	my ($content) = @_;
-+	for ($content) {
-+		s/([\xC2\xC3])([\x80-\xBF])/chr(ord($1)<<6&0xC0|ord($2)&0x3F)/eg;
-+	}
-+	return ($content)
-+}
-+
-+sub recode_custom_to_ascii
-+{
-+	my ($content) = @_;
-+	for ($content) {
-+		s/\xc0/A/g; # latin capital letter a with grave
-+		s/\xc1/A/g; # latin capital letter a with acute
-+		s/\xc2/A/g; # latin capital letter a with circumflex
-+		s/\xc3/A/g; # latin capital letter a with tilde
-+		s/\xc4/Ae/g; # latin capital letter a with diaeresis
-+		s/\xc5/Aa/g; # latin capital letter a with ring above
-+		s/\xc6/Ae/g; # latin capital letter ae
-+		s/\xc7/C/g; # latin capital letter c with cedilla
-+		s/\xc8/E/g; # latin capital letter e with grave
-+		s/\xc9/E/g; # latin capital letter e with acute
-+		s/\xca/E/g; # latin capital letter e with circumflex
-+		s/\xcb/Ee/g; # latin capital letter e with diaeresis
-+		s/\xcc/I/g; # latin capital letter i with grave
-+		s/\xcd/I/g; # latin capital letter i with acute
-+		s/\xce/I/g; # latin capital letter i with circumflex
-+		s/\xcf/Ie/g; # latin capital letter i with diaeresis
-+		s/\xd0/Dh/g; # latin capital letter eth (icelandic)
-+		s/\xd1/N/g; # latin capital letter n with tilde
-+		s/\xd2/O/g; # latin capital letter o with grave
-+		s/\xd3/O/g; # latin capital letter o with acute
-+		s/\xd4/O/g; # latin capital letter o with circumflex
-+		s/\xd5/O/g; # latin capital letter o with tilde
-+		s/\xd6/Oe/g; # latin capital letter o with diaeresis
-+		s/\xd8/Oe/g; # latin capital letter o with stroke
-+		s/\xd9/U/g; # latin capital letter u with grave
-+		s/\xda/U/g; # latin capital letter u with acute
-+		s/\xdb/U/g; # latin capital letter u with circumflex
-+		s/\xdc/Ue/g; # latin capital letter u with diaeresis
-+		s/\xdd/Y/g; # latin capital letter y with acute
-+		s/\xde/TH/g; # latin capital letter thorn (icelandic)
-+		s/\xdf/ss/g; # latin small letter sharp s (german)
-+		s/\xe0/a/g; # latin small letter a with grave
-+		s/\xe1/a/g; # latin small letter a with acute
-+		s/\xe2/a/g; # latin small letter a with circumflex
-+		s/\xe3/a/g; # latin small letter a with tilde
-+		s/\xe4/ae/g; # latin small letter a with diaeresis
-+		s/\xe5/aa/g; # latin small letter a with ring above
-+		s/\xe6/ae/g; # latin small letter ae
-+		s/\xe7/c/g; # latin small letter c with cedilla
-+		s/\xe8/e/g; # latin small letter e with grave
-+		s/\xe9/e/g; # latin small letter e with acute
-+		s/\xea/e/g; # latin small letter e with circumflex
-+		s/\xeb/ee/g; # latin small letter e with diaeresis
-+		s/\xec/i/g; # latin small letter i with grave
-+		s/\xed/i/g; # latin small letter i with acute
-+		s/\xee/i/g; # latin small letter i with circumflex
-+		s/\xef/ii/g; # latin small letter i with diaeresis
-+		s/\xf0/dh/g; # latin small letter eth (icelandic)
-+		s/\xf1/n/g; # latin small letter n with tilde
-+		s/\xf2/o/g; # latin small letter o with grave
-+		s/\xf3/o/g; # latin small letter o with acute
-+		s/\xf4/o/g; # latin small letter o with circumflex
-+		s/\xf5/o/g; # latin small letter o with tilde
-+		s/\xf6/oe/g; # latin small letter o with diaeresis
-+		s/\xf8/oe/g; # latin small letter o with stroke
-+		s/\xf9/u/g; # latin small letter u with grave
-+		s/\xfa/u/g; # latin small letter u with acute
-+		s/\xfb/u/g; # latin small letter u with circumflex
-+		s/\xfc/ue/g; # latin small letter u with diaeresis
-+		s/\xfd/y/g; # latin small letter y with acute
-+		s/\xfe/th/g; # latin small letter thorn (icelandic)
-+		s/\xff/ye/g; # latin small letter y with diaeresis
-+	}
-+	return ($content);
-+}
-+
-+sub encode_base64
-+# Found in email by Baruzzi Giovanni <giovanni.baruzzi@allianz-leben.de> on openldap mailinglist
-+
-+# Historically this module has been implemented as pure perl code.
-+# The XS implementation runs about 20 times faster, but the Perl
-+# code might be more portable, so it is still here.
-+{
-+	my $res = "";
-+	my $eol = $_[1];
-+	$eol = "\n" unless defined $eol;
-+	pos($_[0]) = 0; # ensure start at the beginning
-+	while ($_[0] =~ /(.{1,45})/gs) {
-+		$res .= substr(pack('u', $1), 1);
-+		chop($res);
-+	}
-+	$res =~ tr|` -_|AA-Za-z0-9+/|;               # `# help emacs
-+	# fix padding at the end
-+	my $padding = (3 - length($_[0]) % 3) % 3;
-+	$res =~ s/.{$padding}$/'=' x $padding/e if $padding;
-+	# break encoded string into lines of no more than 76 characters each
-+	if (length $eol) {
-+		$res =~ s/(.{1,76})/$1$eol/g;
-+	}
-+	$res;
-+}
-+
-+sub validate_ascii
-+{
-+	my ($content) = @_;
-+	$content =~ /^[\x20-\x7E]*$/;
-+}
-+
-+sub validate_utf8
-+{
-+	my ($content) = @_;
-+	if (&validate_ascii($content)) {
-+		return 1;
-+	}
-+	if ($] >= 5.8) {
-+		## No Perl support for UTF-8! ;-/
-+		return undef;
-+	}
-+	$content =~ /^[\x20-\x7E\x{0080}-\x{FFFF}]*$/;
-+}
