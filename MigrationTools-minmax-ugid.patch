@@ -1,7 +1,25 @@
+diff -ruN migrationtools-47.orig/migrate_common.ph migrationtools-47/migrate_common.ph
+--- migrationtools-47.orig/migrate_common.ph	2007-01-10 22:20:42.000000000 +0100
++++ migrationtools-47/migrate_common.ph	2007-01-10 22:35:26.000000000 +0100
+@@ -92,6 +92,14 @@
+ # Comment this out if your ldap server does not support UTF8 encoding
+ $USE_UTF8 = 1;
+ 
++# Uncomment these to exclude system users and groups
++#$IGNORE_UID_BELOW = 1000;
++#$IGNORE_GID_BELOW = 1000;
++
++# And here's the opposite for completeness
++#$IGNORE_UID_ABOVE = 65535;
++#$IGNORE_GID_ABOVE = 65499;
++
+ #
+ # allow environment variables to override predefines
+ #
 diff -ur MigrationTools-47/migrate_group.pl MigrationTools-47-minmax-ugid/migrate_group.pl
 --- MigrationTools-47/migrate_group.pl	2007-11-07 17:52:40.000000000 +0100
 +++ MigrationTools-47-minmax-ugid/migrate_group.pl	2007-11-07 17:50:15.000000000 +0100
-@@ -41,6 +41,22 @@
+@@ -41,6 +41,28 @@
  $PROGRAM = "migrate_group.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
  
@@ -10,6 +28,12 @@ diff -ur MigrationTools-47/migrate_group.pl MigrationTools-47-minmax-ugid/migrat
 +	exit 1;
 +}
 +
++if ( defined($IGNORE_GID_BELOW) ) {
++	$mingid = $IGNORE_GID_BELOW;
++}
++if ( defined($IGNORE_GID_ABOVE) ) {
++	$maxgid = $IGNORE_GID_ABOVE;
++}
 +while ($ARGV[0] =~ /^--.*/) {
 +	if ($ARGV[0] eq "--mingid") {
 +		$mingid = $ARGV[1];
@@ -36,21 +60,39 @@ diff -ur MigrationTools-47/migrate_group.pl MigrationTools-47-minmax-ugid/migrat
 diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-minmax-ugid/migrate_passwd.pl
 --- MigrationTools-47/migrate_passwd.pl	2007-11-07 17:52:40.000000000 +0100
 +++ MigrationTools-47-minmax-ugid/migrate_passwd.pl	2007-11-07 17:52:03.000000000 +0100
-@@ -42,6 +42,23 @@
+@@ -42,6 +42,41 @@
  $PROGRAM = "migrate_passwd.pl";
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
  
 +if ($#ARGV < 0) {
-+	print STDERR "Usage: $PROGRAM [--minuid N] [--maxuid M] infile [outfile]\n";
++	print STDERR "Usage: $PROGRAM [--minuid N] [--maxuid M] [--mingid N] [--maxgid M] infile [outfile]\n";
 +	exit 1;
 +}
 +
++if ( defined($IGNORE_UID_BELOW) ) {
++	$minuid = $IGNORE_UID_BELOW;
++}
++if ( defined($IGNORE_UID_ABOVE) ) {
++	$maxuid = $IGNORE_UID_ABOVE;
++}
++if ( defined($IGNORE_GID_BELOW) ) {
++	$mingid = $IGNORE_GID_BELOW;
++}
++if ( defined($IGNORE_GID_ABOVE) ) {
++	$maxgid = $IGNORE_GID_ABOVE;
++}
 +while ($ARGV[0] =~ /^--.*/) {
 +	if ($ARGV[0] eq "--minuid") {
 +		$minuid = $ARGV[1];
 +		shift ; shift;
 +	} elsif ($ARGV[0] eq "--maxuid") {
 +		$maxuid = $ARGV[1];
++		shift ; shift;
++	if ($ARGV[0] eq "--mingid") {
++		$mingid = $ARGV[1];
++		shift ; shift;
++	} elsif ($ARGV[0] eq "--maxgid") {
++		$maxgid = $ARGV[1];
 +		shift ; shift;
 +	} else {
 +		shift;
@@ -60,12 +102,14 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-minmax-ugid/migra
  &parse_args();
  &read_shadow_file();
  &open_files();
-@@ -76,6 +93,8 @@
+@@ -76,6 +93,10 @@
  	s/å/ae/g;
  
  	local($user, $pwd, $uid, $gid, $gecos, $homedir, $shell) = split(/:/);
 +	next if (defined($minuid) and ($uid < $minuid));
 +	next if (defined($maxuid) and ($uid > $maxuid));
++	next if (defined($mingid) and ($gid < $mingid));
++	next if (defined($maxgid) and ($gid > $maxgid));
  	
  	if ($use_stdout) {
  		&dump_user(STDOUT, $user, $pwd, $uid, $gid, $gecos, $homedir, $shell);
