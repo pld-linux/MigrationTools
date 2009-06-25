@@ -88,7 +88,7 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-minmax-ugid/migra
 +	} elsif ($ARGV[0] eq "--maxuid") {
 +		$maxuid = $ARGV[1];
 +		shift ; shift;
-+	if ($ARGV[0] eq "--mingid") {
++	} elsif ($ARGV[0] eq "--mingid") {
 +		$mingid = $ARGV[1];
 +		shift ; shift;
 +	} elsif ($ARGV[0] eq "--maxgid") {
