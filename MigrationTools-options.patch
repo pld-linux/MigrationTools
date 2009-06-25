@@ -1,15 +1,17 @@
 diff -ur MigrationTools-47/migrate_passwd.pl x/migrate_passwd.pl
 --- MigrationTools-47/migrate_passwd.pl	2009-06-24 13:47:15.299291875 +0200
 +++ x/migrate_passwd.pl	2009-06-24 16:26:58.000000000 +0200
-@@ -46,12 +46,20 @@
+@@ -46,11 +46,21 @@
  $NAMINGCONTEXT = &getsuffix($PROGRAM);
  
  if ($#ARGV < 0) {
--	print STDERR "Usage: $PROGRAM [--minuid N] [--maxuid M] infile [outfile]\n";
+-	print STDERR "Usage: $PROGRAM [--minuid N] [--maxuid M] [--mingid N] [--maxgid M] infile [outfile]\n";
 +	print STDERR "Usage: $PROGRAM [options] infile [outfile]\n";
 +	print STDERR "  Options:\n";
 +	print STDERR "	--minuid N	Minimal UID number to migrate\n";
-+	print STDERR "	--maxuid M	Maximal UIF number to migrate\n";
++	print STDERR "	--maxuid M	Maximal UID number to migrate\n";
++	print STDERR "	--mingid N	Minimal GID number to migrate\n";
++	print STDERR "	--maxgid M	Maximal GID number to migrate\n";
 +	print STDERR "	--samba		Migrate smbpasswd\n";
 +	print STDERR "	-s FILE		Path to shadow file (default: /etc/shadow)\n";
 +	print STDERR "	-S FILE		Path to smbpasswd file (default: /etc/samba/smbpasswd)\n";
@@ -17,9 +19,16 @@ diff -ur MigrationTools-47/migrate_passwd.pl x/migrate_passwd.pl
  }
  
  $do_samba = 0;
--while ($ARGV[0] =~ /^--.*/) {
 +$shadowf = "/etc/shadow";
 +$smbpassf = "/etc/samba/smbpasswd";
+ if ( defined($IGNORE_UID_BELOW) ) {
+ 	$minuid = $IGNORE_UID_BELOW;
+ }
+@@ -55,7 +56,7 @@
+ if ( defined($IGNORE_GID_ABOVE) ) {
+ 	$maxgid = $IGNORE_GID_ABOVE;
+ }
+-while ($ARGV[0] =~ /^--.*/) {
 +while ($ARGV[0] =~ /^-.*/) {
  	if ($ARGV[0] eq "--minuid") {
  		$minuid = $ARGV[1];
