@@ -85,11 +85,10 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_pass
  	if ($shell) {
  		print $HANDLE "loginShell: $shell\n";
  	}
-@@ -226,3 +250,17 @@
+@@ -226,3 +250,16 @@
  	}
- 	$content =~ /^[\x20-\x7E\x{0080}-\x{FFFF}]*$/;
  }
-+
+ 
 +sub read_samba
 +{
 +	open(INPUT, "</etc/samba/smbpasswd");

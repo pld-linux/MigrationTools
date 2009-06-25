@@ -2,8 +2,8 @@ diff -ruN migrationtools-47.orig/migrate_common.ph migrationtools-47/migrate_com
 --- migrationtools-47.orig/migrate_common.ph	2007-01-10 22:20:42.000000000 +0100
 +++ migrationtools-47/migrate_common.ph	2007-01-10 22:35:26.000000000 +0100
 @@ -92,6 +92,14 @@
- # Comment this out if your ldap server does not support UTF8 encoding
- $USE_UTF8 = 1;
+ # such as person.
+ $EXTENDED_SCHEMA = 0;
  
 +# Uncomment these to exclude system users and groups
 +#$IGNORE_UID_BELOW = 1000;
