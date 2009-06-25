@@ -37,7 +37,7 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_pass
  }
  
 +if ($do_samba && !defined($DEFAULT_SMB_SID)) {
-+	print STDERR "You must set \$DEFAULT_SMB_SID in /etc/openldap/migrate_common.ph to migrate smbpasswd\n";
++	print STDERR "You must set \$DEFAULT_SMB_SID in %CONFDIR%migrate_common.ph to migrate smbpasswd\n";
 +	exit 2;
 +}
 +
