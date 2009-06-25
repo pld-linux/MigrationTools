@@ -47,7 +47,7 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_pass
  &open_files();
  
  while(<INFILE>)
-@@ -138,7 +150,23 @@
+@@ -138,7 +150,25 @@
  	print $HANDLE "objectClass: top\n";
  
  	if ($DEFAULT_REALM) {
@@ -59,10 +59,12 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_pass
 +	}
 +
 +	if ($DEFAULT_SMB_SID) {
++		my $userSID = (2 * $uid) + 1000;
++		my $groupSID = (2 * $gid) + 1001;
 +		print $HANDLE "objectClass: sambaSamAccount\n";
 +		print $HANDLE "displayName: $cn\n";
-+		print $HANDLE "sambaSID: $DEFAULT_SMB_SID-$uid\n";
-+		print $HANDLE "sambaPrimaryGroupSID: $DEFAULT_SMB_SID-$gid\n";
++		print $HANDLE "sambaSID: $DEFAULT_SMB_SID-$userSID\n";
++		print $HANDLE "sambaPrimaryGroupSID: $DEFAULT_SMB_SID-$groupSID\n";
 +		if ($do_samba) {
 +			print $HANDLE "sambaLMPassword: ".$sambaUsers{$user}->{"sambaLMPassword"}."\n";
 +			print $HANDLE "sambaNTPassword: ".$sambaUsers{$user}->{"sambaNTPassword"}."\n";
@@ -103,13 +105,14 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_pass
 diff -ur MigrationTools-47/migrate_group.pl MigrationTools-47-krb5/migrate_group.pl
 --- MigrationTools-47/migrate_group.pl	2009-06-23 17:02:54.982471778 +0200
 +++ MigrationTools-47-krb5/migrate_group.pl	2009-06-24 13:43:59.759317493 +0200
-@@ -86,6 +86,11 @@
+@@ -86,6 +86,12 @@
  	print $HANDLE "dn: cn=$group,$NAMINGCONTEXT\n";
  	print $HANDLE "objectClass: posixGroup\n";
  	print $HANDLE "objectClass: top\n";
 +	if ($DEFAULT_SMB_SID) {
++		my $groupSID = (2 * $gid) + 1001;
 +		print $HANDLE "objectClass: sambaGroupMapping\n";
-+		print $HANDLE "sambaSID: $DEFAULT_SMB_SID-$gid\n";
++		print $HANDLE "sambaSID: $DEFAULT_SMB_SID-$groupSID\n";
 +		print $HANDLE "sambaGroupType: 2\n";
 +	}
  	print $HANDLE "cn: $group\n";
