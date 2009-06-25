@@ -1,10 +1,10 @@
-# $Revision: 1.29 $Date: 2009-06-24 14:29:18 $
+# $Revision: 1.30 $Date: 2009-06-25 10:33:06 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl.UTF-8):	Narzędzia do migracji do LDAP
 Name:		MigrationTools
 Version:	47
-Release:	8
+Release:	9
 License:	BSD
 Group:		Networking/Admin
 Source0:	http://www.padl.com/download/%{name}-%{version}.tar.gz
@@ -21,10 +21,11 @@ Patch6:		%{name}-noddp.patch
 Patch7:		%{name}-unique-hosts.patch
 Patch8:		%{name}-sysconfdir.patch
 Patch9:		%{name}-noproto.patch
-Patch10:	%{name}-minmax-ugid.patch
-Patch11:	%{name}-utf8.patch
+Patch10:	%{name}-utf8.patch
+Patch11:	%{name}-minmax-ugid.patch
 Patch12:	%{name}-smbkrb5.patch
 Patch13:	%{name}-options.patch
+Patch14:	%{name}-distinguish_identically_named_services.patch
 URL:		http://www.padl.com/OSS/MigrationTools.html
 BuildRequires:	rpm-perlprov
 BuildArch:	noarch
@@ -75,6 +76,7 @@ istniejących serwisów nazw (zwykłych plików, NIS, NetInfo) do LDAP.
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
 install %{SOURCE1} .
 
 perl -pi -e 's|%%CONFDIR%%|%{_sysconfdir}/openldap/|g;\
