@@ -1,0 +1,41 @@
+diff -ruN migrationtools-47.orig/migrate_services.pl migrationtools-47/migrate_services.pl
+--- migrationtools-47.orig/migrate_services.pl	2006-01-25 05:18:16.000000000 +0100
++++ migrationtools-47/migrate_services.pl	2007-04-02 04:52:00.000000000 +0200
+@@ -155,6 +155,8 @@
+ 	my $Rh_services = shift;
+ 	my $Rh_portmap = shift;
+ 
++	my %protomap = ();
++
+ 	foreach $port (sort {$a <=> $b} (keys %{$Rh_services})) {
+ 		foreach $servicename (keys %{$Rh_services->{$port}}) {
+ 			my @protocols = (keys %{$Rh_services->{$port}{$servicename}});
+@@ -180,13 +182,24 @@
+ 					$suffix = "+ipServicePort=" . &escape_metacharacters($port);
+ 				}
+ 
+-				# Normalize aliases across protocols. Yet
+-				# another uncomfortable compromise.
+-				foreach (keys %{$Rh_services->{$port}{$servicename}{$proto}{'aliases'}}) {
+-					$tmpaliases{$_} = 1;
++				# Normalize aliases across protocols, and
++				# strip those differing only in case.
++				# Other uncomfortable compromises.
++				foreach $alias (keys %{$Rh_services->{$port}{$servicename}{$proto}{'aliases'}}) {
++					next if (grep (/^$alias$/i, keys %tmpaliases));
++					$tmpaliases{$alias} = 1;
+ 				}
+ 			}
+ 
++			# Distinguish different but identically named services
++			# Example: echo on tcp/udp port 7 and on ddp port 4
++			# TODO: Add suffix to oddest protocols (not just highest ports)
++			my $protocols = join('+', sort (@protocols));
++			$protomap{$servicename}{$protocols} = 1;
++			if (scalar(keys %{$protomap{$servicename}}) > 1) {
++				$suffix .= join('+ipServiceProtocol=', map { &escape_metacharacters($_) } ('', @protocols));
++			}
++
+ 			my @aliases = keys(%tmpaliases);
+ 			
+ 			# Finally we build LDIF records for services.
