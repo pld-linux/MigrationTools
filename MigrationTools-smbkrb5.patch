@@ -47,7 +47,7 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_pass
  &open_files();
  
  while(<INFILE>)
-@@ -138,7 +150,25 @@
+@@ -138,7 +150,28 @@
  	print $HANDLE "objectClass: top\n";
  
  	if ($DEFAULT_REALM) {
@@ -56,6 +56,9 @@ diff -ur MigrationTools-47/migrate_passwd.pl MigrationTools-47-krb5/migrate_pass
 +		print $HANDLE "objectClass: krb5KDCEntry\n";
 +		print $HANDLE "krb5PrincipalName: $user\@$DEFAULT_REALM\n";
 +		print $HANDLE "krb5KeyVersionNumber: 0\n";
++		print $HANDLE "krb5KDCFlags: 126\n";
++		print $HANDLE "krb5MaxRenew: 604800\n";
++		print $HANDLE "krb5MaxLife: 86400\n";
 +	}
 +
 +	if ($DEFAULT_SMB_SID) {
