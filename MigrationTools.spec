@@ -1,4 +1,3 @@
-# $Revision: 1.32 $Date: 2009-06-29 19:58:48 $
 %include        /usr/lib/rpm/macros.perl
 Summary:	LDAP Migration Tools
 Summary(pl.UTF-8):	Narzędzia do migracji do LDAP
